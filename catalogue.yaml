@@ -77,4 +77,4 @@
 
   - name: load products
     ansible.builtin.command: mongosh --host MONGODB-SERVER-IPADDRESS </app/db/master-data.js
-    when: catalogue_output.stdout < 0
+    when: catalogue_output.stdout | int < 0 #for this search in brower like ansible convert string to int 
