@@ -8,8 +8,13 @@
       state: installed
     loop:
     - maven
-    - mysq
-    - PyMySQL
+    - mysql
+  
+  - name: install PyMySQL
+    ansible.builtin.pip:
+    name: PyMySQL
+    executable: pip3.9
+
 
   - name: create roboshop system user #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html
     ansible.builtin.user:
@@ -61,7 +66,7 @@
       state: started
       enabled: yes
 
-  - name: connect to mysql using app user
+  - name: connect to mysql using app user #https://docs.ansible.com/ansible/latest/collections/community/mysql/mysql_info_module.html#ansible-collections-community-mysql-mysql-info-module
     community.mysql.mysql_info:
       login_user: shipping
       login_password: RoboShop@1
