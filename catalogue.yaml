@@ -56,3 +56,19 @@
       name: catalogue
       state: started
       enabled: yes
+
+  - name: copy mongodb repo #http://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html
+    ansible.builtin.copy:
+      src: mongodb.repo
+      dest: /etc/yum.repos.d/mongodb.repo
+  
+  - name: install mongodb client
+    ansible.builtin.dnf:
+      name: mongodb-mongosh
+      state: present
+
+  - name: load products data
+    community.mongodb.mongodb_shell:
+      file: "/app/db/master-data.js"
+      idempotent: yes
+      login_host: mongodb.abhi84s-daws.site
