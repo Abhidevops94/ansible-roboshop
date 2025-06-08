@@ -3,7 +3,7 @@
   become: yes
   tasks:
   - name: install package maven and mysql
-    ansible.builtin.package:
+    ansible.builtin.dnf:
       name: "{{ item }}"
       state: installed
     loop:
@@ -38,7 +38,7 @@
   - name: install maven dependencies
     ansible.builtin.command: mvn clean package
     args:
-      chdir: /app
+      chdir: /app #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module.html
 
   - name: rename jar file
     ansible.builtin.command: mv target/shipping-1.0.jar shipping.jar
