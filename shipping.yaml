@@ -77,6 +77,7 @@
 
   - name: import data #https://docs.ansible.com/ansible/latest/collections/community/mysql/mysql_db_module.html#ansible-collections-community-mysql-mysql-db-module
     community.mysql.mysql_db:
+      name: all
       login_user: root
       login_password: RoboShop@1
       login_host: mysql.abhi84s-daws.site
