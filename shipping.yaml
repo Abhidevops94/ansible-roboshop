@@ -8,7 +8,8 @@
       state: installed
     loop:
     - maven
-    - mysql
+    - mysq
+    - PyMySQL
 
   - name: create roboshop system user #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html
     ansible.builtin.user:
