@@ -41,11 +41,16 @@
       src: /tmp/frontend.zip
       dest: /usr/share/nginx/html
       remote_src: yes
+  
+  - name: remove default nginx conf
+    ansible.builtin.file:
+      path: /etc/nginx/nginx.conf
+      state: absent
       
-  - name: copy nginx service to system directory #http://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html
+  - name: copy roboshop nginx conf  #http://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html
     ansible.builtin.copy:
-      src: nginx.service
-      dest: /etc/systemd/system/nginx.service
+      src: nginx.conf
+      dest: /etc/nginx/nginx.conf
 
   - name: restart nginx
     ansible.builtin.service:
