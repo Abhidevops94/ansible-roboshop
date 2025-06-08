@@ -25,9 +25,9 @@
       path: /app
       state: directory
 
-  - name: Download the catalohue code #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/get_url_module.html
+  - name: Download the catalogue code #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/get_url_module.html
     ansible.builtin.get_url: 
-      url: /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
+      url: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
       dest: /tmp/catalogue.zip
   
   - name: extract catalogue code
