@@ -1,0 +1,36 @@
+- name: configure catalogue component
+  hosts: catalogue
+  become: yes
+  tasks:
+  - name: Disable default nodejs module
+    ansible,buildin .command: dnf module disable nodejs -y
+
+  - name: enable nodejs:20
+    ansible,buildin .command: dnf module enable nodejs:20 -y
+  
+  - name: install nodejs
+    ansible.buildin.dnf:
+      name: nodejs
+      state: present
+  
+  - name: create roboshop system user #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html
+    ansible.builtin.user:
+      name: roboshop
+      shell: /sbin/nologin
+      system: true
+      home: /app
+
+  - name: create app directory #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
+    ansible.buildin.file:
+      path: /app
+      state: directory
+
+  - name: Download the catalohue code #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/get_url_module.html
+    ansible.buildin.get_url: 
+      url: curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
+      dest: /tmp/catalogue.zip
+  
+  - name: extract catalogue code
+    ansible.builtin.unarchive:
+      src: /tmp/catalogue.zip
+      dest: /app
