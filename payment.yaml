@@ -1,47 +1,49 @@
-- name: conigure payment server
-  become: yes
+- name: setup payment module
   hosts: payment
+  become: yes
   tasks:
-  - name: install python3 packages
+  - name: install python3 package
     ansible.builtin.dnf:
       name: "{{ item }}"
       state: installed
     loop:
-    - python3 
-    - gcc 
+    - python3
+    - gcc
     - python3-devel
 
-  - name: create app directory
+  - name: create app directory #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
     ansible.builtin.file:
       path: /app
       state: directory
 
-  - name: create roboshop system user
+  - name: create roboshop system user #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html
     ansible.builtin.user:
       name: roboshop
       shell: /sbin/nologin
       system: true
       home: /app
 
-  - name: download payment code
-    ansible.builtin.get_url:
-      url: https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip 
+  - name: Download the payment code #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/get_url_module.html
+    ansible.builtin.get_url: 
+      url: https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip
       dest: /tmp/payment.zip
 
+  # this module thinks files exist on ansible control server, needs to extract on remote machine
+  #remote_src: yes means file already exist in payment server
   - name: extract payment code
     ansible.builtin.unarchive:
       src: /tmp/payment.zip
       dest: /app
-      remote_src: yes
-
-  - name: install dependencies
-    ansible.builtin.pip:
+      remote_src: yes 
+  
+  - name: install dependencies #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/pip_module.html
+    ansible.builtin.pip: 
       requirements: requirements.txt
       executable: pip3.9
     args:
-      chdir: /app
+      chdir: /app #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module.html
 
-  - name: copy payment service
+  - name: copy payment service to system directory #http://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html
     ansible.builtin.copy:
       src: payment.service
       dest: /etc/systemd/system/payment.service
@@ -50,11 +52,8 @@
     ansible.builtin.systemd_service:
       daemon_reload: true
 
-  - name: enable and start payment
+  - name: start and enable payment.service  #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/service_module.html
     ansible.builtin.service:
       name: payment
       state: started
       enabled: yes
-
-
-  
